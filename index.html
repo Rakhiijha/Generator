@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>✨ Diwali Greeting Creator & Animated Themes ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;600&family=Montserrat:wght@300;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {margin:0;padding:0;font-family:'Inter',sans-serif;background:#081124;color:#fff;display:flex;justify-content:center;padding:20px;}
+.container {max-width:900px;width:100%;background:#111;padding:20px;border-radius:15px;box-shadow:0 0 20px rgba(255,255,255,0.1);}
+header h1 {font-family:'Great Vibes',cursive;text-align:center;margin-bottom:10px;}
+header p {text-align:center;margin-bottom:20px;font-size:0.9rem;}
+form .row {display:flex;flex-wrap:wrap;gap:15px;margin-bottom:20px;}
+form label {flex-basis:100%;margin-bottom:5px;font-weight:500;}
+form input, form select, form textarea {flex:1;padding:8px 10px;border-radius:8px;border:none;font-size:0.9rem;}
+.controls {display:flex;gap:10px;justify-content:center;margin-top:15px;}
+button {padding:10px 15px;border:none;border-radius:8px;cursor:pointer;background-color:#ffb74d;color:#111;font-weight:bold;transition:0.3s;}
+button.secondary {background:#444;color:#fff;}
+button:hover {opacity:0.8;}
+.preview {margin-top:20px;text-align:center;position:relative;}
+.greeting-card {width:100%;max-width:500px;margin:10px auto;padding:20px;border-radius:15px;background:#222;color:#fff;position:relative;overflow:hidden;min-height:250px;}
+.greeting-card img {max-width:100%;border-radius:12px;}
+.greeting-card h1 {font-family:'Great Vibes',cursive;font-size:2rem;margin-bottom:10px;}
+.greeting-card p {font-size:1rem;line-height:1.4;}
+footer {text-align:center;margin-top:20px;font-size:0.8rem;color:#aaa;}
+
+/* Animations */
+.flame, .candle-flame {width:10px;height:20px;background:orange;border-radius:50%;position:absolute;bottom:50px;left:50%;transform:translateX(-50%);animation:flicker 0.2s infinite;}
+@keyframes flicker {0%,100%{opacity:1;transform:translateX(-50%) scaleY(1);}50%{opacity:0.6;transform:translateX(-48%) scaleY(1.2);}}
+.glow-orb {position:absolute;width:20px;height:20px;border-radius:50%;background:yellow;opacity:0.6;animation:float 5s infinite;}
+@keyframes float {0%{transform:translateY(0);}50%{transform:translateY(-30px);}100%{transform:translateY(0);}}
+.firework {position:absolute;width:4px;height:4px;border-radius:50%;background:white;animation:explode 1s forwards;}
+@keyframes explode {0%{transform:translate(0,0) scale(1);opacity:1;}100%{transform:translate(var(--x),var(--y)) scale(0);opacity:0;}}
+</style>
+</head>
+<body>
+<main class="container">
+<header>
+<h1>🎇 Diwali Greeting Creator & Animated Themes 🎇</h1>
+<p>Create, customize, preview, and download your Diwali card with festive animations!</p>
+</header>
+
+<form id="form">
+<div class="row">
+<label for="toInput">To</label>
+<input id="toInput" type="text" placeholder="Recipient name" required>
+
+<label for="fromInput">From</label>
+<input id="fromInput" type="text" placeholder="Your name" required>
+
+<label for="msgInput">Message</label>
+<textarea id="msgInput" rows="3" placeholder="Write your Diwali wish..."></textarea>
+
+<label for="themeSelect">Theme</label>
+<select id="themeSelect">
+<option value="classic">🪔 Classic Warm — Traditional Diya Glow</option>
+<option value="glow">✨ Golden Glow — Elegant & Radiant</option>
+<option value="sparkle">🎇 Sparkly Colorful — Fireworks & Fun</option>
+<option value="minimal">🌙 Minimal — Sleek & Modern</option>
+<option value="festival">🎉 Festive Lights — Colorful Lamps & Garland</option>
+<option value="fireworks">💥 Fireworks Night — Vibrant & Energetic</option>
+<option value="candlelight">🕯 Candlelight — Soft Warm Mood</option>
+</select>
+
+<label for="photoInput">Upload Photo (optional)</label>
+<input id="photoInput" type="file" accept="image/*">
+</div>
+
+<div class="row">
+<label for="primaryColor">Accent Color</label>
+<input id="primaryColor" type="color" value="#ffb74d">
+
+<label for="bgColor">Background Color</label>
+<input id="bgColor" type="color" value="#081124">
+
+<label for="fontSelect">Font Style</label>
+<select id="fontSelect">
+<option value="Inter">Inter — Modern</option>
+<option value="Montserrat">Montserrat — Geometric</option>
+<option value="Playfair Display">Playfair — Elegant</option>
+<option value="Great Vibes">Great Vibes — Script</option>
+</select>
+
+<label for="titleText">Title</label>
+<input id="titleText" type="text" placeholder="Short title" value="Happy Diwali!">
+
+<label for="bodyText">Message</label>
+<input id="bodyText" type="text" placeholder="Short message" value="Wishing you light, joy and prosperity.">
+
+<label for="bgImage">Upload Background Image (optional)</label>
+<input id="bgImage" type="file" accept="image/*">
+</div>
+
+<div class="controls">
+<button id="previewBtn" type="button">Preview</button>
+<button id="generateBtn" type="button">Download</button>
+<button id="resetBtn" type="button" class="secondary">Reset</button>
+</div>
+</form>
+
+<section id="preview" class="preview" hidden>
+<h2>Preview</h2>
+<div id="previewCard" class="greeting-card"></div>
+<button id="downloadBtn" class="btn">Download as image</button>
+</section>
+
+<footer>🎆 Made with ❤️ for Diwali Celebration</footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+// Elements
+const toInput = document.getElementById('toInput');
+const fromInput = document.getElementById('fromInput');
+const msgInput = document.getElementById('msgInput');
+const themeSelect = document.getElementById('themeSelect');
+const photoInput = document.getElementById('photoInput');
+const primaryColor = document.getElementById('primaryColor');
+const bgColor = document.getElementById('bgColor');
+const fontSelect = document.getElementById('fontSelect');
+const titleText = document.getElementById('titleText');
+const bodyText = document.getElementById('bodyText');
+const bgImage = document.getElementById('bgImage');
+const previewSection = document.getElementById('preview');
+const previewCard = document.getElementById('previewCard');
+const previewBtn = document.getElementById('previewBtn');
+const generateBtn = document.getElementById('generateBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+// Update preview
+function updatePreview(){
+  previewCard.innerHTML='';
+  previewCard.style.backgroundColor=bgColor.value;
+  previewCard.style.color=primaryColor.value;
+  previewCard.style.fontFamily=fontSelect.value;
+  previewCard.style.backgroundImage='';
+
+  if(bgImage.files[0]){
+    const reader = new FileReader();
+    reader.onload = ()=> previewCard.style.backgroundImage=`url(${reader.result})`;
+    reader.readAsDataURL(bgImage.files[0]);
+  }
+
+  // Greeting content
+  const h1=document.createElement('h1');
+  h1.textContent=titleText.value||'Happy Diwali!';
+  previewCard.appendChild(h1);
+
+  const p=document.createElement('p');
+  p.innerHTML=`To: <strong>${toInput.value}</strong><br>${msgInput.value || bodyText.value}<br>From: <strong>${fromInput.value}</strong>`;
+  previewCard.appendChild(p);
+
+  if(photoInput.files[0]){
+    const img=document.createElement('img');
+    const reader=new FileReader();
+    reader.onload=()=> img.src=reader.result;
+    reader.readAsDataURL(photoInput.files[0]);
+    previewCard.appendChild(img);
+  }
+
+  addThemeAnimation(themeSelect.value);
+  previewSection.hidden=false;
+}
+
+// Theme animations
+function addThemeAnimation(theme){
+  // remove existing animations
+  const existing=document.querySelectorAll('.flame,.candle-flame,.glow-orb,.firework');
+  existing.forEach(e=>e.remove());
+
+  if(theme==='classic'){
+    const flame=document.createElement('div');
+    flame.className='flame';
+    previewCard.appendChild(flame);
+  } else if(theme==='glow'){
+    for(let i=0;i<5;i++){
+      const orb=document.createElement('div');
+      orb.className='glow-orb';
+      orb.style.left=Math.random()*90+'%';
+      orb.style.top=Math.random()*80+'%';
+      orb.style.animationDuration=(3+Math.random()*3)+'s';
+      previewCard.appendChild(orb);
+    }
+  } else if(theme==='fireworks' || theme==='sparkle'){
+    for(let i=0;i<15;i++){
+      const fw=document.createElement('div');
+      fw.className='firework';
+      fw.style.setProperty('--x', (Math.random()*200-100)+'px');
+      fw.style.setProperty('--y', (Math.random()*-200)+'px');
+      fw.style.left=Math.random()*100+'%';
+      fw.style.top=Math.random()*50+'%';
+      previewCard.appendChild(fw);
+      setTimeout(()=>fw.remove(),1000);
+    }
+  } else if(theme==='candlelight'){
+    const flame=document.createElement('div');
+    flame.className='candle-flame';
+    flame.style.bottom='30px';
+    previewCard.appendChild(flame);
+  }
+}
+
+// Download
+function downloadCard(){
+  html2canvas(previewCard).then(canvas=>{
+    const link=document.createElement('a');
+    link.download='diwali-greeting.png';
+    link.href=canvas.toDataURL();
+    link.click();
+  });
+}
+
+// Reset
+function resetForm(){
+  document.getElementById('form').reset();
+  previewSection.hidden=true;
+  previewCard.innerHTML='';
+}
+
+// Event listeners
+previewBtn.addEventListener('click',updatePreview);
+generateBtn.addEventListener('click',downloadCard);
+resetBtn.addEventListener('click',resetForm);
+</script>
+</body>
+</html>
